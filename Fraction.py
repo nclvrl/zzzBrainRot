@@ -1,8 +1,49 @@
 class Fraction(object):
 
     def __init__(self, numerator=0, denominator=1):
-        #TODO
-        pass
+        if denominator == 0:
+            raise ZeroDivisionError("Denominator cannot be zero.")
+        
+        if isinstance(numerator, str):
+            fraction_str = numerator.strip()
+
+            if "/" in fraction_str:
+                fraction_parts = fraction_str.split('/')
+                if len(fraction_parts) == 2:
+                    try:
+                        strNum = int(fraction_parts[0])
+                        strDenom = int(fraction_parts[1])
+
+                        if strDenom == 0:
+                            raise ZeroDivisionError("Denominator cannot be zero.")
+                       
+                        self.numerator = strNum
+                        self.denominator = strDenom
+
+                    except (ValueError, ZeroDivisionError):
+                        self.numerator = 0
+                        self.denominator = 1
+                else:
+                    self.numerator = 0
+                    self.denominator = 1
+            else:
+                self.numerator = 0
+                self.denominator = 1
+        elif isinstance(numerator, int):
+            self.numerator = numerator
+            self.denominator = denominator
+        else:
+            self.numerator = 0
+            self.denominator = 1
+
+        gcd_value = Fraction.gcd(self.numerator, self.denominator)
+        if gcd_value != 0:
+            self.numerator //= gcd_value
+            self.denominator //= gcd_value
+
+        if self.denominator < 0:
+            self.numerator = -self.numerator
+            self.denominator = -self.denominator
 
     def gcd(a, b):
         if a == 0 or b == 0:
